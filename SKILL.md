@@ -1,6 +1,6 @@
 ---
 name: skill-enhance
-description: Create, enhance, harden, and prepare skills for release. Use this skill whenever the user wants to build a new skill, strengthen an existing skill, improve trigger accuracy, add README or eval materials, review whether a skill can reliably guide an LLM, or decide if a skill is ready to publish. Also use it when the user wants to improve a locally available skill, including a self-created skill, a hub-downloaded skill, a skill stored by Codex or Claude Code, or skill-enhance itself. When local skill modification is requested, verify that the target can actually be accessed and edited in the current environment; if it cannot, say so clearly. If local editing is possible, confirm the target path and the user's edit intent before making changes. Do not use it for ordinary copy editing, unrelated code refactors, or simple skill installation tasks.
+description: Create, improve, review, and locally customize skills with a quality-first workflow. Use this skill when the user wants to build a new skill, strengthen an existing one, improve trigger accuracy or execution clarity, fill missing artifacts such as README, evals, metadata, or references, review publish readiness, or safely modify a locally available skill package. When local modification is requested, verify access and writeability first, report blockers clearly, and confirm the target path and edit intent before editing. Do not use it for ordinary prose editing, unrelated code refactors, or simple skill discovery or installation.
 ---
 
 # Skill Enhance
@@ -48,6 +48,118 @@ Treat these as first-class quality dimensions:
 5. validation coverage
 6. publish readiness
 7. local edit safety
+
+## Canonical Workflow
+
+`SKILL.md` is the source of truth for the workflow.
+`README.md` should keep only a concise human-facing summary.
+`references/workflows.md` should extend or explain the workflow, but should not redefine it as a competing source.
+
+Unless the user requests a lighter path, run this workflow in order:
+
+### Phase 1: Identify mode
+
+Decide whether the task is:
+
+- new skill creation
+- existing skill enhancement
+- local skill modification
+- trigger optimization
+- artifact completion
+- quality review
+- publish-readiness review
+
+## Mode Selection Rule
+
+Choose the primary mode using this priority:
+
+1. If the user wants to change a locally available skill package, use **Local skill modification**.
+2. If the user asks whether a skill is ready for release or what is still missing before release, use **Publish-readiness review**.
+3. If the user mainly wants to improve when the skill triggers or stops triggering, use **Trigger optimization**.
+4. If the user mainly wants to add or fix missing files such as README, evals, metadata, or references, use **Artifact completion**.
+5. If the user already has a skill and wants broader quality improvements, use **Existing skill enhancement**.
+6. If the user wants a new skill from scratch, use **New skill creation**.
+7. If the request is mostly diagnostic and no concrete package changes are yet requested, use **Quality review**.
+
+If several modes apply, pick the highest-priority primary mode and treat the others as supporting concerns.
+
+### Phase 2: Check local editability when relevant
+
+If the task involves a local skill package:
+
+- identify the target skill
+- identify or confirm the target path
+- determine whether the environment can access the path
+- determine whether the environment can write to the path
+- determine whether the user wants analysis only or actual edits
+
+### Phase 3: Define the contract
+
+Lock down:
+
+- skill purpose
+- positive trigger cases
+- negative trigger cases
+- output contract
+- required artifacts
+- validation expectations
+
+### Phase 4: Build or revise artifacts
+
+Create or update the package files that are required for the current goal.
+
+### Phase 5: Run review gates
+
+Always review:
+
+- trigger boundary
+- output contract
+- execution reliability
+- artifact completeness
+- publish readiness
+
+Also review local modification safety when the target is a local installed skill.
+
+### Phase 6: Report status
+
+State:
+
+- what was changed
+- what still needs work
+- whether the package is draft, internally usable, release-candidate, or publish-ready
+
+## Canonical Package Layout
+
+Use this as the default package layout for a reusable skill:
+
+```text
+skill-name/
+├── SKILL.md
+├── README.md
+├── agents/
+│   └── openai.yaml
+├── evals/
+│   └── evals.json
+└── references/
+    ├── trigger-design.md
+    ├── output-contracts.md
+    ├── review-checklist.md
+    ├── publish-readiness.md
+    ├── artifact-matrix.md
+    ├── skill-packaging.md
+    ├── workflows.md
+    └── package-layout.md
+```
+
+Interpretation:
+
+- `SKILL.md`: required
+- `README.md`: strongly recommended for reusable or published skills
+- `agents/openai.yaml`: recommended metadata entry point
+- `evals/evals.json`: strongly recommended when the skill should be reviewable
+- `references/`: selected support docs, not a dump of unrelated material
+
+If the skill is only a tiny local experiment, the package may be lighter, but reusable skills should default to this structure.
 
 ## Task Modes
 
@@ -115,6 +227,61 @@ Treat these as separate states:
 - **editable after confirmation**
 - **ready to modify now**
 
+### 1.6 Local modification decision table
+
+Use this decision table whenever the target is a local skill package:
+
+- **If the target path is unknown**: ask the user to identify or confirm the path before planning edits.
+- **If the target path is known but the environment cannot access it**: explain that the skill can review the request conceptually but cannot inspect or modify that package from the current environment.
+- **If the target path is accessible but not writable**: stay in analysis mode, describe the recommended changes, and say clearly that edits cannot be applied from the current environment.
+- **If the target path is writable but the user has not confirmed edit intent**: summarize the planned changes and ask for confirmation before editing.
+- **If the target path is writable and the user has confirmed edit intent**: apply the changes and report exactly what was modified.
+
+## Mode-Specific Playbooks
+
+### Playbook A: New skill creation
+
+Use this when the user wants a new skill.
+
+1. Identify the target capability and audience.
+2. Define trigger boundary and output contract.
+3. Create the canonical package layout.
+4. Write `SKILL.md` first, then supporting artifacts.
+5. Add eval prompts.
+6. Run review gates and report readiness.
+
+### Playbook B: Existing skill enhancement
+
+Use this when the user already has a skill package.
+
+1. Read the current package first.
+2. Identify capability gaps, trigger problems, artifact gaps, and unclear instructions.
+3. Decide which files need revision.
+4. Apply targeted improvements instead of rewriting blindly.
+5. Re-run review gates and summarize what improved.
+
+### Playbook C: Local skill modification
+
+Use this when the target skill exists on the local machine.
+
+1. Identify the target skill and path.
+2. Check accessibility and writeability.
+3. Apply the local modification decision table.
+4. If the path is not writable, stay in analysis mode and say so clearly.
+5. If the path is writable, confirm the edit intent before changing files.
+6. Apply changes only after confirmation.
+7. Report exactly what was changed in the local package.
+
+### Playbook D: Publish-readiness review
+
+Use this when the user wants release confidence.
+
+1. Review package naming and description quality.
+2. Review README, metadata, evals, and references.
+3. Review trigger boundary and output contract.
+4. Review whether the package is understandable to a new user.
+5. Report readiness level and the remaining gaps.
+
 ### 2. Define the skill contract
 
 Do not write `SKILL.md` before the contract is clear.
@@ -129,6 +296,7 @@ At minimum, define:
 - validation expectations
 
 Use `references/trigger-design.md` and `references/output-contracts.md`.
+Use `references/workflows.md` and `references/package-layout.md` when the user needs a fixed process or a standard file tree.
 
 ### 3. Build or revise the package
 
@@ -334,3 +502,5 @@ Check whether:
 - `references/publish-readiness.md`: release-oriented review criteria
 - `references/artifact-matrix.md`: which artifacts are required or optional
 - `references/skill-packaging.md`: packaging guidance for local, Git, and release contexts
+- `references/workflows.md`: fixed process for create, enhance, modify, and release-review tasks
+- `references/package-layout.md`: canonical skill package layout and file responsibilities

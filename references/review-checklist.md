@@ -13,6 +13,7 @@ Use this file to review a skill draft before calling it done.
 ## 2. Execution Review
 
 - Does the workflow have clear steps?
+- Is there a fixed workflow instead of loose advice only?
 - Are decisions explicit?
 - Does the skill guide the agent toward delivery?
 - Are references scoped and useful?
@@ -25,6 +26,7 @@ Use this file to review a skill draft before calling it done.
 
 ## 4. Artifact Review
 
+- Does the package follow a consistent layout?
 - Is `README.md` needed?
 - Is `agents/openai.yaml` present?
 - Are `evals/evals.json` prompts needed?
