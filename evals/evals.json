@@ -15,24 +15,36 @@
     },
     {
       "id": 3,
+      "prompt": "Improve the skill stored at `/Users/me/.codex/skills/my-skill`. I want you to modify the local files so the skill is easier to trigger and has a better README.",
+      "expected_output": "The response should treat this as local skill modification, explicitly check whether the target path is accessible and writable, and require confirmation of the target path and edit intent before claiming that edits will be applied.",
+      "files": []
+    },
+    {
+      "id": 4,
+      "prompt": "I downloaded a skill from a hub and want it to better match how I work. Please review it and, if possible, update the local copy. If you cannot modify it from here, tell me clearly.",
+      "expected_output": "The response should distinguish between analysis and editable local modification, state whether the environment can modify the target, and avoid pretending to apply changes when access is unavailable or unclear.",
+      "files": []
+    },
+    {
+      "id": 5,
       "prompt": "Review this skill before release. I need to know whether it is still missing README, evals, references, metadata, or any publish-facing material.",
       "expected_output": "The response should perform artifact completeness and publish-readiness review, identify gaps, and distinguish required artifacts from optional ones.",
       "files": []
     },
     {
-      "id": 4,
+      "id": 6,
       "prompt": "Rewrite the trigger description for this skill. It currently fires too often on general coding tasks and still misses some of the cases it was designed for.",
       "expected_output": "The response should focus on trigger-boundary optimization, discuss over-triggering and under-triggering, and propose stronger positive and negative boundaries.",
       "files": []
     },
     {
-      "id": 5,
+      "id": 7,
       "prompt": "I need a skill package that includes human-facing docs, agent-facing instructions, eval prompts, and a release-note draft. Build the package structure and explain why each file is there.",
       "expected_output": "The response should emphasize artifact completeness, package structure, and file purpose, and should not stop at only SKILL.md.",
       "files": []
     },
     {
-      "id": 6,
+      "id": 8,
       "prompt": "Install this skill for me and tell me which command to run.",
       "expected_output": "The response should recognize that installation is outside the main boundary of this skill and avoid pretending that this is a skill-creation or skill-hardening task.",
       "files": []

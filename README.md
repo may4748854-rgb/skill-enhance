@@ -10,6 +10,7 @@ This skill helps with:
 
 - creating a new skill from scratch
 - enhancing an existing skill instead of only rewriting it
+- improving a locally available skill package
 - improving trigger accuracy and trigger boundaries
 - defining stronger output contracts
 - filling in missing package artifacts
@@ -39,12 +40,21 @@ Depending on the task, this skill may create or improve:
 - bundled `references/`
 - release-note or changelog draft text
 
+It can work on:
+
+- new skills
+- existing project-local skills
+- locally downloaded hub skills
+- locally stored Codex or Claude Code skills
+- `skill-enhance` itself
+
 ## When To Use It
 
 Use this skill when:
 
 - you want to build a serious reusable skill
 - you need to harden an existing skill before release
+- you want to refine a local installed or downloaded skill so it better matches your own workflow
 - you are not confident the current skill can guide an LLM well
 - the skill needs better triggers, docs, evals, or references
 - you want a publish-readiness review instead of a light draft
@@ -56,6 +66,8 @@ Do not use it when:
 - you only need a tiny one-off local draft
 - you are just installing or discovering skills
 - the work is unrelated to skill design or packaging
+
+When the request is about modifying a local skill, this skill should first verify that the current environment can access and edit the target path. If it cannot, it should say so clearly. If it can, it should confirm the target path and the user's edit intent before making changes.
 
 ## Bundled Files
 
@@ -71,6 +83,8 @@ Do not use it when:
 - "Review my skill package and tell me what is still missing before release."
 - "Add README, evals, references, and release-note copy to this skill."
 - "I think this skill under-triggers. Rewrite the description and review the boundary."
+- "Improve the skill installed at this local path, but ask me to confirm the path before editing it."
+- "Review a hub-downloaded local skill and tell me whether you can modify it in the current environment."
 
 ## Validation
 

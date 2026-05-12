@@ -1,4 +1,4 @@
 interface:
   display_name: "Skill Enhance"
-  short_description: "Create and harden publishable skills"
-  default_prompt: "Use $skill-enhance to create or enhance a skill, improve its trigger boundary and output contract, fill missing package artifacts, and review whether it is ready to publish."
+  short_description: "Create, refine, and modify local skills"
+  default_prompt: "Use $skill-enhance to create or enhance a skill, improve a local skill package, strengthen trigger boundaries and output contracts, fill missing package artifacts, and review whether the skill is ready to publish. If local modification is requested, verify access first and confirm the target path before editing."

@@ -9,6 +9,7 @@ Good for:
 - project-only use
 - fast iteration
 - internal experiments
+- local installed-skill customization
 
 Usually enough:
 
@@ -23,6 +24,7 @@ Good for:
 - Git-based sharing
 - team use
 - installation through skill tooling
+- locally downloaded skills that the user wants to adapt before reuse
 
 Usually needs:
 
@@ -49,3 +51,11 @@ Usually needs:
 - review-ready references
 - release-note or changelog copy
 
+## Local Modification Rule
+
+If the package being improved already exists locally, treat it as a local-edit workflow:
+
+- identify the exact target path
+- verify whether the current environment can edit it
+- confirm the path and user intent before applying edits
+- if write access is unavailable, stay in analysis mode and say so explicitly

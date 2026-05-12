@@ -30,10 +30,17 @@ Use this file to review a skill draft before calling it done.
 - Are `evals/evals.json` prompts needed?
 - Are references sufficient but not bloated?
 
-## 5. Release Review
+## 5. Local Modification Review
+
+- Is the local target skill clearly identified?
+- Is the target path known?
+- Can the current environment likely write to that path?
+- Has the user confirmed the path and edit intent before modification?
+- Does the response distinguish review-only mode from applied edits?
+
+## 6. Release Review
 
 - Is the name understandable?
 - Is the package understandable to a new user?
 - Is there enough material for release review?
 - Can you explain what changed and why?
-

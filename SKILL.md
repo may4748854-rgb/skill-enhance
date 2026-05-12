@@ -1,6 +1,6 @@
 ---
 name: skill-enhance
-description: Create, enhance, harden, and prepare skills for release. Use this skill whenever the user wants to build a new skill, strengthen an existing skill, improve trigger accuracy, add README or eval materials, review whether a skill can reliably guide an LLM, or decide if a skill is ready to publish. Also use it when a skill needs stronger output contracts, artifact completeness checks, or publish-readiness review. Do not use it for ordinary copy editing, unrelated code refactors, or simple skill installation tasks.
+description: Create, enhance, harden, and prepare skills for release. Use this skill whenever the user wants to build a new skill, strengthen an existing skill, improve trigger accuracy, add README or eval materials, review whether a skill can reliably guide an LLM, or decide if a skill is ready to publish. Also use it when the user wants to improve a locally available skill, including a self-created skill, a hub-downloaded skill, a skill stored by Codex or Claude Code, or skill-enhance itself. When local skill modification is requested, verify that the target can actually be accessed and edited in the current environment; if it cannot, say so clearly. If local editing is possible, confirm the target path and the user's edit intent before making changes. Do not use it for ordinary copy editing, unrelated code refactors, or simple skill installation tasks.
 ---
 
 # Skill Enhance
@@ -15,6 +15,7 @@ Use this skill when the task is primarily about skill quality, including:
 
 - creating a new skill from scratch
 - enhancing an existing skill
+- improving a locally stored or installed skill
 - improving skill trigger accuracy
 - strengthening a skill's output contract
 - adding or refining README, evals, references, metadata, or release notes
@@ -46,6 +47,7 @@ Treat these as first-class quality dimensions:
 4. artifact completeness
 5. validation coverage
 6. publish readiness
+7. local edit safety
 
 ## Task Modes
 
@@ -53,20 +55,22 @@ Classify the request into one primary mode:
 
 1. **New skill creation**
 2. **Existing skill enhancement**
-3. **Trigger optimization**
-4. **Artifact completion**
-5. **Quality review**
-6. **Publish-readiness review**
+3. **Local skill modification**
+4. **Trigger optimization**
+5. **Artifact completion**
+6. **Quality review**
+7. **Publish-readiness review**
 
 If several modes are present, use this sequence:
 
 1. summarize the current state and target
 2. identify the quality gaps
 3. decide what the skill must do and when it should trigger
-4. define or rewrite the output contract
-5. produce or revise the package artifacts
-6. run the review gates
-7. state whether the skill is publish-ready
+4. if local modification is requested, verify access and confirm the target path
+5. define or rewrite the output contract
+6. produce or revise the package artifacts
+7. run the review gates
+8. state whether the skill is publish-ready
 
 ## Workflow
 
@@ -75,6 +79,7 @@ If several modes are present, use this sequence:
 Before writing anything, determine:
 
 - is the user creating a new skill or enhancing an existing one
+- is the user asking to modify a local skill package
 - who the skill is for
 - what user requests should trigger it
 - what the skill must produce when triggered
@@ -86,6 +91,29 @@ If an existing skill already exists, read it first and extract:
 - current trigger wording
 - bundled artifacts
 - gaps or inconsistencies
+
+### 1.5 Check local editability before modifying an existing local skill
+
+If the request involves changing a locally available skill, do not jump straight into edits.
+
+First determine:
+
+- whether the target skill path is known
+- whether the current environment can access that path
+- whether the current environment can write to that path
+- whether the user is asking for analysis only or actual modification
+
+If the path is unclear, ask the user to confirm the target path or clearly identify the skill.
+
+If the path is known but the environment cannot modify it, say so clearly and stop short of claiming the change can be applied.
+
+If the path is writable, confirm the target path and edit intent before making changes.
+
+Treat these as separate states:
+
+- **analyzable but not editable**
+- **editable after confirmation**
+- **ready to modify now**
 
 ### 2. Define the skill contract
 
@@ -176,35 +204,58 @@ State clearly whether the skill is:
 - release-candidate
 - publish-ready
 
+### 8. Handle local-skill modification safely
+
+When the target is a local skill package, explicitly report:
+
+- the target skill name
+- the target path
+- whether the path was user-provided or inferred
+- whether the environment can edit it
+- whether user confirmation was received before edits
+
+Never silently modify a local installed skill on assumption alone.
+
 ## Output Contract
 
 Default to this structure unless the user requests another format:
 
 ### 1. Task mode
 
-State whether this is new creation, enhancement, trigger optimization, artifact completion, quality review, or publish-readiness review.
+State whether this is new creation, enhancement, local skill modification, trigger optimization, artifact completion, quality review, or publish-readiness review.
 
 ### 2. Current-state summary
 
 Describe the current package or the requested target in 2-4 lines.
 
-### 3. Key quality gaps or design goals
+### 3. Local target status
+
+If a local skill is involved, state:
+
+- target skill
+- target path
+- whether the path is confirmed
+- whether the environment appears able to modify it
+- whether user confirmation is still required
+If no local skill is involved, say that this section is not applicable.
+
+### 4. Key quality gaps or design goals
 
 List the highest-impact issues or goals.
 
-### 4. Recommended changes
+### 5. Recommended changes
 
 Describe what to create, rewrite, or add.
 
-### 5. Artifact plan
+### 6. Artifact plan
 
 State which files are required, optional, missing, or already strong.
 
-### 6. Review findings
+### 7. Review findings
 
 Summarize trigger quality, execution reliability, output-contract quality, and publish-readiness findings.
 
-### 7. Validation
+### 8. Validation
 
 State what was validated, what still needs validation, and whether the package is publish-ready.
 
@@ -253,6 +304,16 @@ Check whether the package needs:
 
 Check whether the package is understandable, verifiable, and suitable for public or team-wide use.
 
+### Local Modification Check
+
+Check whether:
+
+- the target local skill is clearly identified
+- the path is known or confirmed
+- the environment appears able to edit it
+- the user has confirmed the path and edit intent before modification
+- the response clearly distinguishes analysis from applied edits
+
 ## Constraints
 
 - Do not treat a valid frontmatter block as proof of a good skill.
@@ -261,6 +322,9 @@ Check whether the package is understandable, verifiable, and suitable for public
 - Do not skip artifact completion if the user is aiming for release.
 - Do not force heavyweight benchmarking when lightweight validation is enough.
 - Do not claim publish readiness without checking docs, evals, and packaging materials.
+- Do not claim a local skill was modified unless the target path was accessible and the user confirmed the edit.
+- Do not infer write access from mere path existence.
+- Do not silently edit a downloaded or installed local skill without path confirmation.
 
 ## References
 
